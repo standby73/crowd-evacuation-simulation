@@ -1,0 +1,45 @@
+"""Configuration file.
+
+Configuration of project variables that we want to have available
+everywhere and considered configuration.
+"""
+# import os
+import dataclasses
+from dataclasses import dataclass
+import os
+from typing import Literal
+
+@dataclass 
+class Configuration:
+    """Configuration class for the project."""
+    LOGS_DIR:  str = os.path.join("..", "logs")
+
+    seed:     int = 42
+    
+    width:    int = 30
+    height:   int = 30
+    initial_agents: int = 125
+    track_last_steps: int = 4
+    path_finding_algorithm: Literal["MANHATTAN", "BFS", "A*"] = "A*"
+    scenario_type: Literal["OPEN", "MALL", "CORRIDOR", "SEATS", "SNAKE", "RANDOM"] = "MALL"
+    n_exits: int = 4
+    differentiate_exits: bool = False
+    respawn_agents: bool = False
+
+    n_experiments: int = 1000
+    n_processes: int = 20
+
+    # BEHAVIOR RATIOS
+    agent_types_ratios: dict = dataclasses.field(default_factory=lambda: {
+        "polite": 0.7,
+        "aggressive": 0.2,
+        "slow": 0.1,
+    })
+
+
+    def __post_init__(self):
+        ...
+
+    def to_dict(self) -> dict:
+        """Convert Configuration to dictionary."""
+        return dataclasses.asdict(self)
